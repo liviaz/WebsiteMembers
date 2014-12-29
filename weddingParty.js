@@ -2,6 +2,9 @@
 
 var main = function () {
 
+	var blockSize = 200;
+	$("#party-content").css({'height': blockSize*6 + 'px'});
+
 	// if button is clicked, display list
 	$(".party-button").hover(function () {
 		// remove all currently displayed lists
@@ -14,6 +17,7 @@ var main = function () {
 		var typeSelected;
 		var typeNotSelected;
 		var typeNum;
+
 
 		if (this.id === "button-girls"){
 			typeSelected = "bridesmaids";
@@ -32,12 +36,15 @@ var main = function () {
 			if($("#" + typeNotSelected + "-list").hasClass("party-list-show")){
 
 				// fold them all in and remove text
-				$("." + typeNotSelected + "-item").animate({'height': '0px'}, 200);
+				$("." + typeNotSelected + "-item").velocity({'height': '0px'}, 100);
+				$("." + typeNotSelected + "-item").children(".sub-item-show").removeClass("sub-item-show");
+
 				$("." + typeNotSelected + "-item").promise().done(function() {
-					$(this).text("");
 					$("." + typeNotSelected + "-item").removeClass(typeNotSelected + "-item-show");
 					$("#" + typeNotSelected + "-list").removeClass("party-list-show");
 				});
+
+
 			}
 
 			// then fold out type to show
@@ -49,14 +56,14 @@ var main = function () {
 				// fold out first one, then put the rest behind it
 				var firstItem = $("." + typeSelected + "-item").first();
 				firstItem.css({'width': '50%', 'margin-top': '0px', 'z-index': '5'});
-				firstItem.text(firstItem.attr("id"));
-				firstItem.animate({'height': '100px'}, 400);
+				firstItem.velocity({'height': blockSize + 'px'}, 600);
+				firstItem.children(".sub-item").addClass("sub-item-show");
 
 				// expand all the rest behind the first one
 				firstItem.promise().done(function (){
 					firstItem.siblings().each(function (i){
-						$(this).text(this.id);
-						$(this).css({'height': '100px',
+						$(this).children(".sub-item").addClass("sub-item-show");
+						$(this).css({'height': blockSize + 'px',
 							'width': '50%',
 							'margin-top': '0px'});
 						$(this).css("zIndex", typeNum - 1 - i);
@@ -67,8 +74,8 @@ var main = function () {
 				var itemToFoldOut = $("." + typeSelected + "-item").first();
 				var currMargin = 0;
 				setTimeout(function () {
-					foldOutItems(itemToFoldOut.next(), currMargin + 110);
-				}, 400);
+					foldOutItems(itemToFoldOut.next(), currMargin + blockSize + 10);
+				}, 600);
 			});
 		}
 	});
@@ -78,7 +85,7 @@ var main = function () {
 		if(itemName.length > 0){
 
 			// fold this one out, then call function again after timeout
-			itemName.animate({'margin-top': currMargin + 'px' }, 400);
+			itemName.velocity({'margin-top': currMargin + 'px' }, 600);
 
 			// move siblings with it
 			itemName.promise().done(function() {
@@ -91,7 +98,7 @@ var main = function () {
 
 				// call function again
 				setTimeout(function () {
-					foldOutItems(itemName.next(), currMargin + 110);
+					foldOutItems(itemName.next(), currMargin + blockSize + 10);
 				}, 50);
 
 			});
