@@ -1,4 +1,6 @@
 // wedding party animations
+// Livia Zarnescu
+// 12-30-2015
 
 var main = function () {
 
